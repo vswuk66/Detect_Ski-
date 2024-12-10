@@ -10,28 +10,17 @@ def parse_arguments():
     parser.add_argument(
         "--model_path",
         type=str,
-        default=r"C:\\project_detect_buke\\CVAT2YOLO-main\\my_dataset_yolo\\runs\\detect\\train11\\weights\\best.pt",
+        required=True,
         help="Path to the YOLO model weights (.pt)."
     )
     parser.add_argument(
         "--onnx_path",
         type=str,
-        default=r"C:\\project_detect_buke\\CVAT2YOLO-main\\my_dataset_yolo\\runs\\detect\\train11\\weights\\best.onnx",
+        required=True,
         help="Path to save the exported ONNX model."
     )
-    parser.add_argument(
-        "--video",
-        type=str,
-        default=r"C:\\project_detect_buke\\CVAT2YOLO-main\\my_dataset_yolo\\test_jetski.mp4",
-        help="Path to the input video file."
-    )
-    parser.add_argument(
-        "--output",
-        type=str,
-        default=r"C:\\project_detect_buke\\CVAT2YOLO-main\\my_dataset_yolo\\tracked_output.mp4",
-        help="Path to save the processed video."
-    )
     return parser.parse_args()
+
 
 def ensure_onnx_model(args):
     # Проверяем существование ONNX модели
@@ -63,6 +52,7 @@ def ensure_onnx_model(args):
     else:
         print("Failed to export YOLO model to ONNX.")
         exit(1)
+
 
 if __name__ == "__main__":
     args = parse_arguments()
