@@ -1,4 +1,5 @@
 import os
+
 import cv2
 import argparse
 import numpy as np
@@ -30,8 +31,8 @@ def parse_arguments():
     parser.add_argument(
         "--model_path",
         type=str,
-        default="best.pt",
-        help="Path to the YOLO model weights."
+        default="C:\\project_detect_buke\\CVAT2YOLO-main\\my_dataset_yolo\\runs\\detect\\train11\\weights\\best.onnx",
+        help="Path to the YOLO  onnx model weights."
     )
     return parser.parse_args()
 
@@ -57,7 +58,7 @@ def process_video(args):
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     out = cv2.VideoWriter(args.output, fourcc, fps, (frame_width, frame_height))
 
-    tracker = Sort(max_age=500, min_hits=3, iou_threshold=0.3)
+    tracker = Sort(max_age=50, min_hits=3, iou_threshold=0.3)
     scale = None
     object_data = {}
 
