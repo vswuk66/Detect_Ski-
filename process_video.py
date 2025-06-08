@@ -9,13 +9,18 @@ from tqdm import tqdm
 from ultralytics import YOLO
 
 # Function to calculate speed
+
+
 def calculate_speed(displacement_pixels, time_interval_s, scale):
     speed_m_s = (displacement_pixels * scale) / time_interval_s
     return speed_m_s * 3.6  # Convert speed to km/h
 
 # Command-line arguments
+
+
 def parse_arguments():
-    parser = argparse.ArgumentParser(description="Jet Ski tracking and speed estimation.")
+    parser = argparse.ArgumentParser(
+        description="Jet Ski tracking and speed estimation.")
     parser.add_argument(
         "--video",
         type=str,
@@ -31,15 +36,19 @@ def parse_arguments():
     parser.add_argument(
         "--model_path",
         type=str,
-        default="C:\\project_detect_buke\\CVAT2YOLO-main\\my_dataset_yolo\\runs\\detect\\train11\\weights\\best.onnx",
-        help="Path to the YOLO  onnx model weights."
+        default="runs/detect/train11/weights/best.onnx",
+        help="Path to the YOLO ONNX model weights.",
     )
     return parser.parse_args()
 
 # Main function
+
+
 def process_video(args):
     if not os.path.isfile(args.model_path):
-        raise FileNotFoundError(f"YOLO model file not found: {args.model_path}")
+        raise FileNotFoundError(
+            f"YOLO model file not found: {
+                args.model_path}")
 
     JET_SKI_LENGTH = 3.0
     SMOOTHING_WINDOW = 10
@@ -56,7 +65,8 @@ def process_video(args):
     print(f"Video FPS: {fps}, Resolution: {frame_width}x{frame_height}")
 
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-    out = cv2.VideoWriter(args.output, fourcc, fps, (frame_width, frame_height))
+    out = cv2.VideoWriter(args.output, fourcc, fps,
+                          (frame_width, frame_height))
 
     tracker = Sort(max_age=50, min_hits=3, iou_threshold=0.3)
     scale = None
@@ -108,11 +118,13 @@ def process_video(args):
                 }
 
             last_cx, last_cy = object_data[track_id]["last_position"]
-            displacement_pixels = np.sqrt((cx - last_cx) ** 2 + (cy - last_cy) ** 2)
+            displacement_pixels = np.sqrt(
+                (cx - last_cx) ** 2 + (cy - last_cy) ** 2)
             object_data[track_id]["last_position"] = (cx, cy)
 
             if scale is not None and fps > 0:
-                speed_kmh = calculate_speed(displacement_pixels, 1 / fps, scale)
+                speed_kmh = calculate_speed(
+                    displacement_pixels, 1 / fps, scale)
                 object_data[track_id]["speeds"].append(speed_kmh)
                 smoothed_speed = np.mean(object_data[track_id]["speeds"])
             else:
@@ -138,6 +150,7 @@ def process_video(args):
     out.release()
     cv2.destroyAllWindows()
     print("Video processing completed.")
+
 
 if __name__ == "__main__":
     args = parse_arguments()

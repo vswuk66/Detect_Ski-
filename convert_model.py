@@ -6,7 +6,8 @@ import tempfile
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description="Check or convert YOLO model to ONNX.")
+    parser = argparse.ArgumentParser(
+        description="Check or convert YOLO model to ONNX.")
     parser.add_argument(
         "--model_path",
         type=str,
@@ -41,7 +42,11 @@ def ensure_onnx_model(args):
 
     # Экспорт модели в ONNX
     print("Exporting YOLO model to ONNX format...")
-    exported_path = model.export(format="onnx", imgsz=640, device=device, half=False)
+    exported_path = model.export(
+        format="onnx",
+        imgsz=640,
+        device=device,
+        half=False)
 
     # Проверяем результат экспорта
     if exported_path and os.path.isfile(exported_path):
